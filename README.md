@@ -39,4 +39,30 @@ pkgx task atlas:migrate
 pkgx task atlas:inspect
 ```
 
+## Using the API
+
+### Creating some data
+
+```graphql
+mutation CreateOwnerAndPet {
+  owner: insertOwnerOne(
+    object: {
+      name: "Kevin"
+      pets: {
+        data: {
+          name: "Porkchop"
+        }
+      }
+    }
+  ) {
+    id
+    name
+    pets {
+      id
+      name
+    }
+  }
+}
+```
+
 [atlas]: https://atlasgo.io/
