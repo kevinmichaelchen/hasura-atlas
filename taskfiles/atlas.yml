@@ -1,0 +1,19 @@
+version: "3"
+
+tasks:
+  inspect:
+    desc: "Inspect"
+    cmd: |
+      pkgx +atlasgo.io atlas \
+        schema inspect \
+        -u "postgres://postgres:postgrespassword@localhost:15432/postgres?sslmode=disable" \
+        --schema public
+
+  migrate:
+    desc: "Applies database migrations"
+    cmd: |
+      pkgx +atlasgo.io atlas \
+        schema apply \
+        -u "postgres://postgres:postgrespassword@localhost:15432/postgres?sslmode=disable" \
+        --to file://db/schema/public.hcl \
+        --schema public

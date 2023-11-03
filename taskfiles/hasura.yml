@@ -1,0 +1,51 @@
+version: "3"
+
+vars:
+  CMD_HASURA: |
+    pkgx hasura@latest --skip-update-check --project hasura \
+  CMD_MD: metadata --endpoint http://localhost:8080 --admin-secret {{.HASURA_GRAPHQL_ADMIN_SECRET}}
+  CMD_MIGRATE: migrate --database-name default --endpoint http://localhost:8080 --admin-secret {{.HASURA_GRAPHQL_ADMIN_SECRET}}
+
+tasks:
+  console:
+    desc: "Fires up the Hasura Console UI"
+    aliases: [ui]
+    deps:
+      - deploy
+    cmd: |
+      {{.CMD_HASURA}} console --admin-secret {{.HASURA_GRAPHQL_ADMIN_SECRET}}
+
+  deploy:
+    run: once
+    desc: "Run migrations and apply metadata"
+    cmd: |
+      {{.CMD_HASURA}} deploy --admin-secret {{.HASURA_GRAPHQL_ADMIN_SECRET}}
+
+  migrate:
+    desc: "Run SQL migrations"
+    cmd: |
+      {{.CMD_HASURA}} {{.CMD_MIGRATE}} apply
+
+  migrate-status:
+    desc: "Check status of SQL migrations"
+    aliases: [status, stat, stats, migrate-stat, migrate-stats]
+    cmd: |
+      {{.CMD_HASURA}} {{.CMD_MIGRATE}} status
+
+  md-apply:
+    desc: "Apply metadata from our file directory"
+    aliases: [apply]
+    cmd: |
+      {{.CMD_HASURA}} {{.CMD_MD}} apply
+
+  md-reload:
+    desc: "Reload metadata from live remote schemas and databases"
+    aliases: [reload, rel]
+    cmd: |
+      {{.CMD_HASURA}} {{.CMD_MD}} reload
+
+  md-list:
+    desc: "List Hasura metadata inconsistencies"
+    aliases: [list]
+    cmd: |
+      {{.CMD_HASURA}} {{.CMD_MD}} inconsistency list

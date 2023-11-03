@@ -1,0 +1,27 @@
+version: "3"
+
+dotenv:
+  - .env
+
+includes:
+  hasura:
+    taskfile: taskfiles/hasura.yml
+  atlas:
+    taskfile: taskfiles/atlas.yml
+
+tasks:
+  start:
+    aliases:
+      - run
+    desc: "Spin everything up"
+    cmds:
+      - pkgx docker-clean stop || true
+      - pkgx killport 8081
+      - docker compose up -d postgres
+      # Wait until Postgres is healthy... with Exponential Backoff
+      - pkgx eb -- pkgx pg_isready -U postgres -d postgres -p 15432 -h 127.0.0.1
+      - docker compose up -d
+      # Wait until Hasura is healthy... with Exponential Backoff
+      - pkgx eb -x 20 -- curl http://localhost:8080/healthz
+      - task: hasura:reload
+      - task: hasura:ui

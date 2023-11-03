@@ -1,0 +1,11 @@
+table:
+  name: owner
+  schema: public
+array_relationships:
+  - name: pets
+    using:
+      foreign_key_constraint_on:
+        column: owner_id
+        table:
+          name: pet
+          schema: public
