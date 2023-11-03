@@ -7,6 +7,11 @@ table "owner" {
   column "id" {
     null = false
     type = int
+    identity {
+      generated = ALWAYS
+      start = 1
+      increment = 1
+    }
   }
   column "name" {
     null = true
@@ -22,6 +27,11 @@ table "pet" {
   column "id" {
     null = false
     type = int
+    identity {
+      generated = ALWAYS
+      start = 1
+      increment = 1
+    }
   }
   column "name" {
     null = false
