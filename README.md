@@ -4,11 +4,22 @@ This demo shows an example Hasura project which sources its SQL migrations from 
 
 Think of it like Terraform for your database!
 
-This is a big improvement over existing database migration solutions, which inevitably lead to the accumulation of dozens, if not hundreds, of `up.sql` migration files.
+This is a big improvement over existing database migration solutions, for a few reasons:
+
+1. You can easily `git diff` and see how your schemas has evolved over time.
+1. You avoid accumulating dozens, if not hundreds, of `up.sql` migration files.
+
+The database schema is maintained with HCL in [**`public.hcl`**](./db/schema/public.hcl).
 
 ## Getting started
 
 ### With pkgx
+
+Assuming you've installead [pkgx](https://pkgx.sh/), it should be easy to get started.
+
+```shell
+sudo rm -rf $(which pkgx) ; curl -fsS https://pkgx.sh | sh
+```
 
 #### Start Hasura
 
